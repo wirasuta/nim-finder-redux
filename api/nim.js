@@ -1,6 +1,5 @@
-const mysql = require('mysql')
 const metaphone = require('metaphone')
-const { promisify } = require('util')
+const dbQuery = require('./utils/db')
 
 const ITEM_PER_PAGE = 20
 
@@ -59,13 +58,6 @@ module.exports = async (req, res) => {
     return
   }
 
-  const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  })
-
   const page = +query.p
   const rawQuery = `%${query.q}%`
   const queryArray = query.q.split(' ')
@@ -103,19 +95,11 @@ module.exports = async (req, res) => {
   sqlStringExtended += `LIMIT ${page * ITEM_PER_PAGE}, ${(page + 1) *
     ITEM_PER_PAGE}`
 
-  connection.connect()
-
-  let results = await promisify(connection.query).bind(connection)(sqlString, [
-    rawQuery,
-    rawQuery,
-    rawQuery
-  ])
+  let results = await dbQuery(sqlString, [rawQuery, rawQuery, rawQuery])
 
   let resultsExtended = []
   if (page === 0 && results.length < 5 && !_exactExist(results, query.q)) {
-    resultsExtended = await promisify(connection.query).bind(
-      connection
-    )(sqlStringExtended, [
+    resultsExtended = await dbQuery(sqlStringExtended, [
       ...nimLikeArray,
       ...nimLikeArray,
       ...metaphoneArray,
@@ -133,7 +117,4 @@ module.exports = async (req, res) => {
   }
 
   res.status(200).json(resData)
-  connection.end(() => {
-    return
-  })
 }
