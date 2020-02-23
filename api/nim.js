@@ -3,14 +3,6 @@ const metaphone = require('metaphone')
 const { promisify } = require('util')
 
 const ITEM_PER_PAGE = 20
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-})
-
-connection.connect()
 
 const _isNumeric = str => {
   return /^\d+$/.test(str)
@@ -67,6 +59,13 @@ module.exports = async (req, res) => {
     return
   }
 
+  const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  })
+
   const page = +query.p
   const rawQuery = `%${query.q}%`
   const queryArray = query.q.split(' ')
@@ -104,6 +103,8 @@ module.exports = async (req, res) => {
   sqlStringExtended += `LIMIT ${page * ITEM_PER_PAGE}, ${(page + 1) *
     ITEM_PER_PAGE}`
 
+  connection.connect()
+
   let results = await promisify(connection.query).bind(connection)(sqlString, [
     rawQuery,
     rawQuery,
@@ -123,6 +124,8 @@ module.exports = async (req, res) => {
 
     resultsExtended = _removeDupByID(results, resultsExtended)
   }
+
+  connection.end()
 
   results = [...results, ...resultsExtended]
 

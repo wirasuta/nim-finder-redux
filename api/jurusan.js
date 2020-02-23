@@ -1,15 +1,6 @@
 const mysql = require('mysql')
 const { promisify } = require('util')
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-})
-
-connection.connect()
-
 const _isNumeric = str => {
   return /^\d+$/.test(str)
 }
@@ -41,9 +32,20 @@ module.exports = async (req, res) => {
 
   const kodeJurusan = query.q
 
+  const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  })
+
+  connection.connect()
+
   const results = await promisify(connection.query).bind(
     connection
   )('SELECT jurusan FROM kode_jurusan WHERE kode = ? LIMIT 1', [kodeJurusan])
+
+  connection.end()
 
   const resData = {
     message: 'OK',
