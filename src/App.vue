@@ -4,15 +4,17 @@
       <v-container>
         <v-row>
           <v-col sm="12" md="8" lg="6" offset-lg="3" offset-md="2">
-            <h1 class="display-1 font-weight-bold text-center">ITB NIM Finder</h1>
-            <h3 class="subtitle-1 text-center font-italic">redux</h3>
+            <h1 class="title font-weight-bold text-center">
+              ITB NIM Finder:
+              <span class="highlight">Redux</span>
+            </h1>
           </v-col>
         </v-row>
         <v-row>
           <v-col sm="12" md="8" lg="6" offset-lg="3" offset-md="2">
             <v-text-field
               label="Keyword"
-              placeholder="Cari NIM, nama, atau informasi lainnya"
+              placeholder="Cari nama atau NIM. ex: wirasuta 17"
               append-icon="mdi-magnify"
               background-color="#fff"
               color="red"
@@ -52,5 +54,9 @@ export default {
 <style lang="scss">
 body {
   background: #ededed;
+}
+
+.highlight {
+  color: #e57373;
 }
 </style>
