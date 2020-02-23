@@ -9,7 +9,7 @@ const db = mysql({
   }
 })
 
-exports.query = async (query, args) => {
+module.exports = async (query, args) => {
   const results = await db.query(query, args)
   await db.end()
   return results
