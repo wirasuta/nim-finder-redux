@@ -23,7 +23,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <nim-grid />
+        <nim-grid :search-keyword="searchKeyword" @setLoading="setLoading" />
       </v-container>
     </v-content>
   </v-app>
@@ -34,15 +34,18 @@ import NimGrid from "@/components/NIMGrid.vue";
 
 export default {
   name: "App",
-
   components: {
     NimGrid
   },
-
   data: () => ({
     searchKeyword: "",
     loading: false
-  })
+  }),
+  methods: {
+    setLoading(value) {
+      this.loading = value;
+    }
+  }
 };
 </script>
 
