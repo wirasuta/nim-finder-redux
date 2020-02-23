@@ -125,8 +125,6 @@ module.exports = async (req, res) => {
     resultsExtended = _removeDupByID(results, resultsExtended)
   }
 
-  connection.end()
-
   results = [...results, ...resultsExtended]
 
   const resData = {
@@ -135,4 +133,7 @@ module.exports = async (req, res) => {
   }
 
   res.status(200).json(resData)
+  connection.end(() => {
+    return
+  })
 }

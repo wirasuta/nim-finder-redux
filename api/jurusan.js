@@ -45,12 +45,13 @@ module.exports = async (req, res) => {
     connection
   )('SELECT jurusan FROM kode_jurusan WHERE kode = ? LIMIT 1', [kodeJurusan])
 
-  connection.end()
-
   const resData = {
     message: 'OK',
     namaJurusan: results.length ? results[0].jurusan : 'Unknown'
   }
 
   res.status(200).json(resData)
+  connection.end(() => {
+    return
+  })
 }

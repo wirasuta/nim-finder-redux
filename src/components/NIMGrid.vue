@@ -98,7 +98,7 @@ export default {
     },
     async getNamaJurusan(kodeJurusan) {
       const res = await fetch(`/api/jurusan?q=${kodeJurusan}`);
-      const data = res.json();
+      const data = await res.json();
 
       if (data.message === "OK") {
         return data.namaJurusan;
@@ -107,23 +107,33 @@ export default {
       }
     },
     async fetchData(keyword) {
-      if (keyword.length < 3) return;
+      if (keyword.length < 3) {
+        this.$emit("setLoading", false);
+        return;
+      }
 
       const res = await fetch(`/api/nim?q=${keyword}&p=${this.counter}`);
       const data = await res.json();
 
       if (data.message === "OK") {
-        this.results = [
-          ...this.results,
-          ...data.data.map(el => ({
-            id: el.ID,
-            nim: el.nim_jurusan,
-            nama: el.name,
-            jurusan: "",
-            angkatan: el.nim_tpb.substr(3, 2),
-            nimTpb: el.nim_tpb
-          }))
-        ];
+        const nextResults = data.data.map(el => ({
+          id: el.ID,
+          nim: el.nim_jurusan,
+          nama: el.name,
+          jurusan: "",
+          angkatan: el.nim_tpb.substr(3, 2),
+          nimTpb: el.nim_tpb
+        }));
+
+        for (let i = 0; i < nextResults.length; i++) {
+          const nim = nextResults[i].nim
+            ? nextResults[i].nim
+            : nextResults[i].nimTpb;
+
+          nextResults[i].jurusan = await this.getNamaJurusan(nim.substr(0, 3));
+        }
+
+        this.results = [...this.results, ...nextResults];
       }
 
       this.$emit("setLoading", false);
