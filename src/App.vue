@@ -1,28 +1,53 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <v-app>
+    <v-content>
+      <v-container>
+        <v-row>
+          <v-col sm="12" md="8" lg="6" offset-lg="3" offset-md="2">
+            <h1 class="display-1 font-weight-bold text-center">ITB NIM Finder</h1>
+            <h3 class="subtitle-1 text-center font-italic">redux</h3>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col sm="12" md="8" lg="6" offset-lg="3" offset-md="2">
+            <v-text-field
+              label="Keyword"
+              placeholder="Cari NIM, nama, atau informasi lainnya"
+              append-icon="mdi-magnify"
+              background-color="#fff"
+              color="red"
+              v-model="searchKeyword"
+              :hide-details="true"
+              :loading="loading"
+              solo
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <nim-grid />
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import NimGrid from "@/components/NIMGrid.vue";
 
 export default {
   name: "App",
+
   components: {
-    HelloWorld
-  }
+    NimGrid
+  },
+
+  data: () => ({
+    searchKeyword: "",
+    loading: false
+  })
 };
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  background: #ededed;
 }
 </style>
