@@ -1,24 +1,16 @@
-# nim-finder-redux
+# NIM Finder Redux
 
-## Project setup
-```
-yarn install
-```
+NIM Finder for ITB students. It is a redux of previous version with better search and UX. Some of the feature of this app are:
+- Search by name, nim, or batch
+- Inexact name matching using metaphone
+- PWA support
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+# Usage
 
-### Compiles and minifies for production
-```
-yarn build
-```
+Simply install all the dependencies and run the project. To utilize all the functionalities, run with vercel cli (formerly now cli).
 
-### Lints and fixes files
+```bash
+npm i
+npm i -g vercel
+vercel dev
 ```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
